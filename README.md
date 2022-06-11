@@ -1,17 +1,10 @@
-<a href="https://www.tri.global/" target="_blank">
- <img align="right" src="/media/figs/tri-logo.png" width="25%"/>
-</a>
+# dd3d-supplement
 
 ## fork from https://github.com/TRI-ML/dd3d.git
 
 ## DD3D: "Is Pseudo-Lidar needed for Monocular 3D Object detection?"
 
-[Full video](https://youtu.be/rXBoUpq9CVQ)
-
 Official [PyTorch](https://pytorch.org/) implementation of _DD3D_: [**Is Pseudo-Lidar needed for Monocular 3D Object detection? (ICCV 2021)**](https://arxiv.org/abs/2108.06417),
-_Dennis Park<sup>\*</sup>, Rares Ambrus<sup>\*</sup>, Vitor Guizilini, Jie Li, and Adrien Gaidon_.
-
-You should also enable these features in configuration, such as [`WANDB.ENABLED`](https://github.com/TRI-ML/dd3d/blob/main/configs/defaults.yaml#L14) and [`SYNC_OUTPUT_DIR_S3.ENABLED`](https://github.com/TRI-ML/dd3d/blob/main/configs/defaults.yaml#L29).
 
 ### Datasets
 
@@ -21,11 +14,6 @@ By default, datasets are assumed to be downloaded in `/data/datasets/<dataset-na
 
 The KITTI 3D dataset used in our experiments can be downloaded from the [KITTI website](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d).
 For convenience, we provide the standard splits used in [3DOP](https://xiaozhichen.github.io/papers/nips15chen.pdf) for training and evaluation:
-
-```
-# download a standard splits subset of KITTI
-curl -s https://tri-ml-public.s3.amazonaws.com/github/dd3d/mv3d_kitti_splits.tar | sudo tar xv -C /data/datasets/KITTI3D
-```
 
 The dataset must be organized as follows:
 
@@ -111,7 +99,9 @@ Internally, `IMS_PER_BATCH` parameters of the [optimizer](https://github.com/TRI
 
 ### Predict
 
+```bash
 ./predict.py +experiments=dd3d_kitti_dla34
+```
 
 ### Evaluation
 

@@ -23,7 +23,7 @@ def fill_color_polygon(image, polygon, color, alpha=0.5):
 
 
 def save_vis(np_arrays_dict, output_dir, filename, step=None):
-    np_arrays_dict = flatten_dict(np_arrays_dizct)
+    np_arrays_dict = flatten_dict(np_arrays_dict)
     npz_filename = os.path.join(output_dir, '' if step is None else f"step{step:06d}", filename)
     os.makedirs(os.path.dirname(npz_filename), exist_ok=True)
     np.savez_compressed(npz_filename, **np_arrays_dict)

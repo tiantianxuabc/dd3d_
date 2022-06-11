@@ -54,7 +54,7 @@ def main(cfg):
     checkpoint_file = cfg.MODEL.CKPT
     
     if checkpoint_file:
-        checkpoint_file = '/home/phj/Data/dd3d-supplementdemo/demo/model/model_final3.pth' 
+        checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final2.pth' 
         print(checkpoint_file)
         Checkpointer(model).load(checkpoint_file)
         print("loaded the weighs")
@@ -265,7 +265,7 @@ def do_test(cfg, model, is_last=False, use_tta=False):
                 gt_viz = mosaic(list(viz_images[k].values()))
                 cv2.imshow("evaluator", gt_viz[:, :, ::-1])
 
-                if cv2.waitKey(0) & 0xFF == ord('q'):
+                if cv2.waitKey(100) & 0xFF == ord('q'):
                     sys.exit()
 
             save_vis(viz_images, dset_output_dir, "visualization")

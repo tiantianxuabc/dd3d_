@@ -54,7 +54,7 @@ def main(cfg):
     checkpoint_file = cfg.MODEL.CKPT
     
     if checkpoint_file:
-        checkpoint_file = '/home/phj/Data/dd3d/model_final3.pth' 
+        checkpoint_file = './demo/model/model_final3.pth' 
         print(checkpoint_file)
         Checkpointer(model).load(checkpoint_file)
         print("loaded the weighs")

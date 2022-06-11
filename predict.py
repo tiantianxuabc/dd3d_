@@ -79,37 +79,39 @@ def inference_context(model):
 def main(cfg):
     setup(cfg)
     dataset_names = register_datasets(cfg)
+    LOG.info("buld the model ...")
     model = build_model(cfg)
  
 
-    checkpoint_file = '/home/phj/Data/dd3d/model_final2.pth' 
-    print(checkpoint_file)
+    checkpoint_file = './demo/model/model_final2.pth' 
+    LOG.info("model loading from {}" .format(checkpoint_file))
     Checkpointer(model).load(checkpoint_file)
-    print("loaded the weighs")
-    
+   
   
     dataset_name = [cfg.DATASETS.TEST.NAME][0]
     metadata = MetadataCatalog.get(dataset_name)
-
-
     class_names = [metadata.contiguous_id_to_name[class_id] for class_id in range(len(metadata.thing_classes))]
     
   
     with ExitStack() as stack:
         if isinstance(model, nn.Module):
             stack.enter_context(inference_context(model))
-        stack.enter_context(torch.no_grad())
-        
+        stack.enter_context(torch.no_grad())        
 
-        file_name = "/home/phj/Data/dd3d/6_1654579942698899000.bmp"
+        file_name = "./demo/images-self/6_1654579942698899000.bmp"
+        file_name = "./demo/images/000041.png"
         file_img = cv2.imread(file_name)
         file_img = file_img[:, :, ::-1]
-        print(file_img.shape)
+        LOG.info("image shape {}".format(file_img.shape))
         img_tensor = torch.from_numpy(file_img.copy())
         img_tensor = img_tensor.permute(2, 0, 1)
+        # img_intrinsics = torch.Tensor([
+        #         [ 1818.24, 0, 973.382],
+        #         [0, 1817.57, 563.979],
+        #         [0, 0, 1]])
         img_intrinsics = torch.Tensor([
-                [ 1818.24, 0, 973.382],
-                [0, 1817.57, 563.979],
+                [ 721.5377, 0, 609.5593],
+                [0, 721.5377, 172.854],
                 [0, 0, 1]])
         img_extrinsics = Pose( wxyz=np.float32([0.500, -0.500, 0.504, -0.496]), tvec = np.float32([0.30, -0.07, -0.06]))
         input = {}
@@ -169,15 +171,18 @@ def main(cfg):
         viz_image = cv2.rotate(viz_image, cv2.cv2.ROTATE_90_COUNTERCLOCKWISE)
         # Crop the BEV image to show only frustum.
         viz_image = bev_frustum_crop(viz_image)
-        cv2.imshow("bev", viz_image)
-        cv2.imshow("3d", img_3d)
-        cv2.imshow("image", img)
+        cv2.imshow("image_object_bev", viz_image)
+        cv2.imwrite(".//demo/outputs/bev.jpg", viz_image)
+        cv2.imshow("image_box_3d", img_3d)
+        cv2.imwrite(".//demo/outputs/result_3d.jpg", img_3d)
+        cv2.imshow("image_box_2d", img)
+        cv2.imwrite(".//demo/outputs/result_2d.jpg", img)
         if cv2.waitKey(0) & 0xFF == ord('q'):
             sys.exit()
 
 
 
 if __name__ == '__main__':
-    print("start")
+    LOG.info("start")
     main()  # pylint: disable=no-value-for-parameter
     LOG.info("DONE.")

@@ -49,6 +49,14 @@ The dataset must be organized as follows:
                 └── ..
 ```
 
+## Install
+
+```bash
+
+pip install -r requirements.txt
+
+```
+
 ### Pre-trained DD3D models
 
 The DD3D models pre-trained on dense depth estimation using DDAD15M can be downloaded here:
@@ -75,9 +83,9 @@ To validate the entire training loop (including [evaluation](./configs/evaluator
 ./train.py +experiments=dd3d_kitti_dla34
 ```
 
-|                         experiment                          | backbone | train mem. (GB) | train time (hr) |                                               train log                                                | Box AP (%) | BEV AP (%) |                                                  download                                                   |
-| :---------------------------------------------------------: | :------: | :-------------: | :-------------: | :----------------------------------------------------------------------------------------------------: | :--------: | :--------: | :---------------------------------------------------------------------------------------------------------: |
-| [config](configs/experiments/dd3d_kitti_dla34_overfit.yaml) |  DLA-34  |        6        |      0.25       | [log](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/logs/log.txt) |   84.54    |   88.83    | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/model_final.pth) |
+|                         experiment                          | backbone | train mem. (GB) | traiqn time (hr) |                                               train log                                                | Box AP (%) | BEV AP (%) |                                                  download                                                   |
+| :---------------------------------------------------------: | :------: | :-------------: | :--------------: | :----------------------------------------------------------------------------------------------------: | :--------: | :--------: | :---------------------------------------------------------------------------------------------------------: |
+| [config](configs/experiments/dd3d_kitti_dla34_overfit.yaml) |  DLA-34  |        6        |       0.25       | [log](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/logs/log.txt) |   84.54    |   88.83    | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/model_final.pth) |
 
 ### Predict
 

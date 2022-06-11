@@ -1,0 +1,39 @@
+# output dir
+outputs/
+wandb/
+
+# cluster hostfiles
+hostfiles/
+
+# Raw files
+*.jpg
+*.png
+*.txt
+*.bmp
+*.pth
+
+# kitti 3d
+data/datasets/KITTI3D
+
+# compilation and distribution
+__pycache__
+_ext
+*.pyc
+*.so
+build/
+dist/
+
+# pytorch/python/numpy formats
+*.pth
+*.pkl
+*.npy
+
+# ipython/jupyter notebooks
+*.ipynb
+**/.ipynb_checkpoints/
+
+# Editor temporaries
+*.swn
+*.swo
+*.swp
+*~

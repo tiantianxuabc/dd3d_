@@ -83,7 +83,7 @@ def main(cfg):
     model = build_model(cfg)
  
 
-    checkpoint_file = './demo/model/model_final2.pth' 
+    checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final3.pth' 
     LOG.info("model loading from {}" .format(checkpoint_file))
     Checkpointer(model).load(checkpoint_file)
    
@@ -98,9 +98,9 @@ def main(cfg):
             stack.enter_context(inference_context(model))
         stack.enter_context(torch.no_grad())        
 
-        file_name = "./demo/images-self/6_1654579942698899000.bmp"
-        file_name = "./demo/images/000041.png"
-        file_img = cv2.imread(file_name)
+        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579942698899000.bmp"
+        file_name = "/home/phj/Data/dd3d-supplement/demo/images/000041.png"
+        file_img = cv2.imread(file_name)   
         file_img = file_img[:, :, ::-1]
         LOG.info("image shape {}".format(file_img.shape))
         img_tensor = torch.from_numpy(file_img.copy())
@@ -172,11 +172,11 @@ def main(cfg):
         # Crop the BEV image to show only frustum.
         viz_image = bev_frustum_crop(viz_image)
         cv2.imshow("image_object_bev", viz_image)
-        cv2.imwrite(".//demo/outputs/bev.jpg", viz_image)
-        cv2.imshow("image_box_3d", img_3d)
-        cv2.imwrite(".//demo/outputs/result_3d.jpg", img_3d)
-        cv2.imshow("image_box_2d", img)
-        cv2.imwrite(".//demo/outputs/result_2d.jpg", img)
+        cv2.imwrite("/home/phj/Data/dd3d-supplement/demo/outputs/result_bev.jpg", viz_image)
+        cv2.imshow("image_object_3d", img_3d)
+        cv2.imwrite("/home/phj/Data/dd3d-supplement/demo/outputs/result_3d.jpg", img_3d)
+        cv2.imshow("image_object_2d", img)
+        cv2.imwrite("/home/phj/Data/dd3d-supplement/demo/outputs/result_2d.jpg", img)
         if cv2.waitKey(0) & 0xFF == ord('q'):
             sys.exit()
 

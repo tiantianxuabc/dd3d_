@@ -25,7 +25,7 @@ def maybe_download_ckpt_from_url(cfg):
     NOTE: All workers must update `cfg.MODEL.CKPT` to use the new path.
     """
     ckpt_path = cfg.MODEL.CKPT
-    ckpt_path = "./demo/model/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped.pth"
+    ckpt_path = "/home/phj/Data/dd3d-supplement/demo/model/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped.pth"
 
     if ckpt_path.startswith("s3://") or ckpt_path.startswith("https://"):
         os.makedirs(cfg.TMP_DIR, exist_ok=True)

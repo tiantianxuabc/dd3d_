@@ -64,6 +64,7 @@ The DD3D models pre-trained on dense depth estimation using DDAD15M can be downl
 | :---: | :---: |
 | DLA34 | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/pretrained/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped.pth) |
 | V2-99 | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/pretrained/depth_pretrained_v99-3jlw0p36-20210423_010520-model_final-remapped.pth) |
+| DLA34 | [model] (链接: https://pan.baidu.com/s/1vpncowhJjhivGNrqMLSTYg 提取码: 4f6q) |
 
 #### (Optional) Eigen-clean subset of KITTI raw.
 

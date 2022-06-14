@@ -7,8 +7,10 @@ import cv2
 
 from collections import OrderedDict, defaultdict
 import sys
+from cv2 import putText
 import hydra
 import numpy
+from requests import put
 from sklearn import impute
 import torch
 import wandb
@@ -83,7 +85,7 @@ def main(cfg):
     model = build_model(cfg)
  
 
-    checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final2.pth' 
+    checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final0.pth' 
     LOG.info("model loading from {}" .format(checkpoint_file))
     Checkpointer(model).load(checkpoint_file)
    
@@ -98,8 +100,9 @@ def main(cfg):
             stack.enter_context(inference_context(model))
         stack.enter_context(torch.no_grad())        
 
-        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579942698899000.bmp"
+        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579408545226000.bmp"
         # file_name = "/home/phj/Data/dd3d-supplement/demo/images/000041.png"
+
         file_img = cv2.imread(file_name)   
         file_img = file_img[:, :, ::-1]
         LOG.info("image shape {}".format(file_img.shape))
@@ -157,7 +160,19 @@ def main(cfg):
 
 
         pred_boxes3d = result["pred_boxes3d"]
-        pred_3d  = pred_boxes3d.vectorize().detach().cpu().numpy()    
+
+
+        pred_3d  = pred_boxes3d.vectorize().detach().cpu().numpy()   
+       
+
+        for idx, box in enumerate(boxes_2d):                
+                score = boxes_2d_scores[idx]
+                class_idx = boxes_2d_pred_classes[idx]
+                tl = (int(box[0]), int(box[1]))
+                br = (int(box[2]), int(box[3]))
+                dist_z = pred_3d[idx][6]
+                dist_z = "dist:%.1f"%dist_z
+                cv2.putText(img, str(dist_z), tl, 0, 1, (0, 130, 250), 1)
 
         d3_box = GenericBoxes3D.from_vectors(pred_3d)    
         img_3d = draw_boxes3d_cam(img_copy, pred_boxes3d, boxes_2d_pred_classes, metadata, input["intrinsics"], result["scores_3d"], render_labels=True)

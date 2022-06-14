@@ -171,7 +171,7 @@ def main(cfg):
                 tl = (int(box[0]), int(box[1]))
                 br = (int(box[2]), int(box[3]))
                 dist_z = pred_3d[idx][6]
-                dist_z = "dist:%.1f"%dist_z
+                dist_z = "%.1f"%dist_z
                 cv2.putText(img, str(dist_z), tl, 0, 1, (0, 130, 250), 1)
 
         d3_box = GenericBoxes3D.from_vectors(pred_3d)    

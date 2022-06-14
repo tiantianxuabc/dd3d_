@@ -100,7 +100,7 @@ def main(cfg):
             stack.enter_context(inference_context(model))
         stack.enter_context(torch.no_grad())        
 
-        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579408545226000.bmp"
+        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579672504172000.bmp"
         # file_name = "/home/phj/Data/dd3d-supplement/demo/images/000041.png"
 
         file_img = cv2.imread(file_name)   

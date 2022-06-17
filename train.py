@@ -2,6 +2,7 @@
 # Copyright 2021 Toyota Research Institute.  All rights reserved.
 import logging
 import os
+from syslog import LOG_INFO
 
 import cv2
 
@@ -52,7 +53,7 @@ def main(cfg):
     model = build_model(cfg)
  
     checkpoint_file = cfg.MODEL.CKPT
-    
+    print("WEITHG IS {}".format(checkpoint_file))
     if checkpoint_file:
         checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final2.pth' 
         print(checkpoint_file)

@@ -1,6 +1,8 @@
 # Copyright 2021 Toyota Research Institute.  All rights reserved.
+from ast import Return
 import logging
 
+import math
 import cv2
 import numpy as np
 import torch
@@ -10,6 +12,46 @@ LOG = logging.getLogger(__name__)
 
 PI = 3.14159265358979323846
 EPS = 1e-7
+
+
+def euler_to_rotation(euler_angle):
+    """
+    Parameters
+    ----------
+    euler_angle: np.array(yaw pitch roll) yaw-pitch-roll angles
+    yaw z-axis rotation matix
+    [[cos(a), -sin(a), 0]
+     [sin(a),  cos(a), 0]
+     [     0,       0, 1]]
+    pitch x-axis rotation matrix
+    [[ cos(ptich),    0,  sin(pitch)]
+     [          0,    1,           0]
+     [-sin(pitch),    0,  cos(pitch)]]
+    roll y-axis rotation matrix
+    [[     1,          0,           0]
+     [     0   cos(roll),  -sin(roll)]
+     [     0,  sin(roll),   cos(roll)]]
+    rotation matrix
+    [[coa(yaw)cos(ptich) cos(yaw)sin(pitch)sin(roll) - sin(yaw)cos(roll)  cos(yaw)sin(pitch)cos(roll) + sin(yaw)sin(roll)]
+     [sin(yaw)cos(pitch) sin(yaw)sin(pitch)sin(roll) + cos(yaw)cos(roll)  sin(yaw)sin(pitch)cos(roll) - cos(yaw)sin(roll)]
+     [       -sin(ptich)                    cos(pitch)sin(roll)                            cos(ptich)cos(roll)           ]]
+    (1, 3), Batch of euler_angle
+
+    Return
+    (3*3)
+    """
+    yaw, pitch, roll  = euler_angle[0], euler_angle[1], euler_angle[2]
+    R_Z = np.array([[math.cos(yaw), -math.sin(yaw), 0]
+                    [math.sin(yaw),  math.cos(yaw), 0]
+                    [            0,              0, 1]])
+    R_X = np.array([[math.cos(pitch), -math.sin(pitch),  0]
+                    [math.sin(pitch),  math.cos(pitch),  0]
+                    [            0,              0,      1]])
+    R_Y = np.array([[ 1,               0,               0 ]
+                    [ 0,   math.cos(roll),  -math.sin(roll)]
+                    [ 0,   math.sin(roll),   math.cos(roll)]])
+    return np.multiply(np.multiply(R_Z, R_X), R_Y)
+
 
 
 def allocentric_to_egocentric(quat, proj_ctr, inv_intrinsics):

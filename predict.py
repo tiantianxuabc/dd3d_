@@ -85,7 +85,7 @@ def main(cfg):
     model = build_model(cfg)
  
 
-    checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final0.pth' 
+    checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final4.pth' 
     LOG.info("model loading from {}" .format(checkpoint_file))
     Checkpointer(model).load(checkpoint_file)
    
@@ -100,7 +100,7 @@ def main(cfg):
             stack.enter_context(inference_context(model))
         stack.enter_context(torch.no_grad())        
 
-        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579672504172000.bmp"
+        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579942698899000.bmp"
         # file_name = "/home/phj/Data/dd3d-supplement/demo/images/000041.png"
 
         file_img = cv2.imread(file_name)   
@@ -135,44 +135,42 @@ def main(cfg):
         boxes_2d = result["pred_boxes"].tensor.cpu().detach().numpy()
         boxes_2d_scores = result["scores"].cpu().detach().numpy()
         boxes_2d_pred_classes = result["pred_classes"].cpu().detach().numpy()
-        for idx, box in enumerate(boxes_2d):                
-                score = boxes_2d_scores[idx]
-                class_idx = boxes_2d_pred_classes[idx]
-                tl = (int(box[0]), int(box[1]))
-                br = (int(box[2]), int(box[3]))
-                
-                color = metadata.thing_colors[class_idx]
-                cv2.rectangle(img, tl, br, color, 1)
 
-                label = _create_text_labels([class_idx], [score] if score is not None else None, class_names)[0]
-                # bottom-right corner
-                text_pos = tuple([box[ 0], box[3]])
-                horiz_align = "left"
-                lighter_color = change_color_brightness(tuple([c / 255. for c in color]), brightness_factor=0.8)
-                H, W = img.shape[:2]
-                default_font_size = max(np.sqrt(H * W) // 90, 10)
-                height_ratio = (box[ 3] - box[ 1]) / np.sqrt(H * W)
-                font_size = (np.clip((height_ratio - 0.02) / 0.08 + 1, 1.2, 2) * 0.5 * default_font_size)
-                V = VisImage(img=img)
-                draw_text(V.ax, label, text_pos, font_size=font_size, color=lighter_color, horizontal_alignment=horiz_align)
-                img = V.get_image()
-
-
-
+        # get the 3d result
         pred_boxes3d = result["pred_boxes3d"]
-
-
         pred_3d  = pred_boxes3d.vectorize().detach().cpu().numpy()   
-       
 
-        for idx, box in enumerate(boxes_2d):                
-                score = boxes_2d_scores[idx]
-                class_idx = boxes_2d_pred_classes[idx]
-                tl = (int(box[0]), int(box[1]))
-                br = (int(box[2]), int(box[3]))
-                dist_z = pred_3d[idx][6]
-                dist_z = "%.1f"%dist_z
-                cv2.putText(img, str(dist_z), tl, 0, 1, (0, 130, 250), 1)
+        for idx, box in enumerate(boxes_2d):    
+
+            dist_z = pred_3d[idx][6]
+            dist_z = "%.1f"%dist_z
+                            
+            score = boxes_2d_scores[idx]
+            class_idx = boxes_2d_pred_classes[idx]
+            tl = (int(box[0]), int(box[1]))
+            br = (int(box[2]), int(box[3]))
+                
+            color = metadata.thing_colors[class_idx]
+            cv2.rectangle(img, tl, br, color, 1)
+                        
+            # cv2.putText(img, str(dist_z), tl, 0, 1, color, 1)
+
+            label = _create_text_labels([class_idx], [score]  if score is not None else None, class_names)[0]
+                # bottom-right corner
+            text_pos = tuple([box[ 0], box[3]])
+            horiz_align = "left"
+            lighter_color = change_color_brightness(tuple([c / 255. for c in color]), brightness_factor=0.8)
+            H, W = img.shape[:2]
+            default_font_size = max(np.sqrt(H * W) // 90, 10)
+            height_ratio = (box[ 3] - box[ 1]) / np.sqrt(H * W)
+            font_size = (np.clip((height_ratio - 0.02) / 0.08 + 1, 1.2, 2) * 0.5 * default_font_size)
+            V = VisImage(img=img)
+            draw_text(V.ax, label, text_pos, font_size=font_size, color=lighter_color, horizontal_alignment=horiz_align)
+            draw_text(V.ax, str(dist_z), tl, font_size=font_size, color=lighter_color, horizontal_alignment=horiz_align)
+            img = V.get_image()
+
+
+
 
         d3_box = GenericBoxes3D.from_vectors(pred_3d)    
         img_3d = draw_boxes3d_cam(img_copy, pred_boxes3d, boxes_2d_pred_classes, metadata, input["intrinsics"], result["scores_3d"], render_labels=True)

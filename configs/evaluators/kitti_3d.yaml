@@ -1,5 +1,5 @@
 # -----------------------------------
 # KITTI3D evaluator (3D bounding box)
 # -----------------------------------
-IOU_THRESHOLDS: [0.5, 0.7]
+IOU_THRESHOLDS: [0.4, 0.4]
 ONLY_PREPARE_SUBMISSION: False

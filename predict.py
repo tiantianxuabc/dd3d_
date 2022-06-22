@@ -85,7 +85,7 @@ def main(cfg):
     model = build_model(cfg)
  
 
-    checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final4.pth' 
+    checkpoint_file = '/home/phj/Data/dd3d-supplement/model_final4.pth' 
     LOG.info("model loading from {}" .format(checkpoint_file))
     Checkpointer(model).load(checkpoint_file)
    
@@ -100,7 +100,7 @@ def main(cfg):
             stack.enter_context(inference_context(model))
         stack.enter_context(torch.no_grad())        
 
-        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579942698899000.bmp"
+        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1654579943332354000.bmp"
         # file_name = "/home/phj/Data/dd3d-supplement/demo/images/000041.png"
 
         file_img = cv2.imread(file_name)   
@@ -111,6 +111,10 @@ def main(cfg):
         img_intrinsics = torch.Tensor([
                 [ 1818.24, 0, 973.382],
                 [0, 1817.57, 563.979],
+                [0, 0, 1]])
+        img_intrinsics = torch.Tensor([
+                [ 1010.23, 0, 960.382],
+                [0, 1009.46, 554.979],
                 [0, 0, 1]])
         # img_intrinsics = torch.Tensor([
         #         [ 721.5377, 0, 609.5593],

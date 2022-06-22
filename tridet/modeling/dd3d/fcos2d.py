@@ -272,6 +272,8 @@ class FCOS2DInference():
 
         # put in the same format as locations
         scores = logits.permute(0, 2, 3, 1).reshape(N, -1, C).sigmoid()
+      
+      
         box2d_reg = box2d_reg.permute(0, 2, 3, 1).reshape(N, -1, 4)
         centerness = centerness.permute(0, 2, 3, 1).reshape(N, -1).sigmoid()
 
@@ -280,6 +282,12 @@ class FCOS2DInference():
         if self.thresh_with_ctr:
             scores = scores * centerness[:, :, None]
 
+        
+        max_scores = scores.max(dim = -1)
+        max_scores_value = max_scores[0]
+        max_scores_index = max_scores[1]
+
+        candidate_mask_max = max_scores_value > self.pre_nms_thresh
         candidate_mask = scores > self.pre_nms_thresh
 
         pre_nms_topk = candidate_mask.reshape(N, -1).sum(1)
@@ -292,12 +300,21 @@ class FCOS2DInference():
         all_fg_inds_per_im, all_topk_indices, all_class_inds_per_im = [], [], []
         for i in range(N):
             scores_per_im = scores[i]
+            max_scores = scores.max(dim = -1)
+             
             candidate_mask_per_im = candidate_mask[i]
             scores_per_im = scores_per_im[candidate_mask_per_im]
+
+                
 
             candidate_inds_per_im = candidate_mask_per_im.nonzero(as_tuple=False)
             fg_inds_per_im = candidate_inds_per_im[:, 0]
             class_inds_per_im = candidate_inds_per_im[:, 1]
+            
+            max_scores_value = max_scores_value[candidate_mask_max]
+            class_inds_per_im = max_scores_index[candidate_mask_max]
+            fg_inds_per_im = candidate_mask_max.nonzero(as_tuple=False)[:,1]
+            
 
             # Cache info here.
             all_fg_inds_per_im.append(fg_inds_per_im)

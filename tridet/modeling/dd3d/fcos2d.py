@@ -310,11 +310,13 @@ class FCOS2DInference():
             candidate_inds_per_im = candidate_mask_per_im.nonzero(as_tuple=False)
             fg_inds_per_im = candidate_inds_per_im[:, 0]
             class_inds_per_im = candidate_inds_per_im[:, 1]
+            # print("fg_inds_per_im.shape {} , class_inds_per_im.shape {}".format(fg_inds_per_im.shape, class_inds_per_im.shape))
             
-            max_scores_value = max_scores_value[candidate_mask_max]
-            class_inds_per_im = max_scores_index[candidate_mask_max]
-            fg_inds_per_im = candidate_mask_max.nonzero(as_tuple=False)[:,1]
+            # max_scores_value = max_scores_value[candidate_mask_max]
             
+            # fg_inds_per_im = candidate_mask_max.nonzero(as_tuple=False)[:,1]
+            # class_inds_per_im = max_scores_index[candidate_mask_max]
+            # print("fg_inds_per_im.shape {} , class_inds_per_im.shape {}".format(fg_inds_per_im.shape, class_inds_per_im.shape))
 
             # Cache info here.
             all_fg_inds_per_im.append(fg_inds_per_im)

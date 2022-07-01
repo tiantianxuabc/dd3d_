@@ -75,13 +75,13 @@ To train our Pseudo-Lidar detector, we curated a new subset of KITTI (raw) datas
 To validate and visualize the dataloader (including [data augmentation](./configs/defaults/augmentation.yaml)), run the following:
 
 ```bash
-./visualize_dataloader.py +experiments=dd3d_kitti_dla34 SOLVER.IMS_PER_BATCH=4
+python3 visualize_dataloader.py +experiments=dd3d_kitti_dla34 SOLVER.IMS_PER_BATCH=4
 ```
 
 To validate the entire training loop (including [evaluation](./configs/evaluators) and [visualization](./configs/visualizers)), run the [overfit experiment](configs/experiments/dd3d_kitti_dla34_overfit.yaml) (trained on test set):
 
 ```bash
-./train.py +experiments=dd3d_kitti_dla34
+python3 train.py +experiments=dd3d_kitti_dla34
 ```
 
 |                         experiment                          | backbone | train mem. (GB) | traiqn time (hr) |                                               train log                                                | Box AP (%) | BEV AP (%) |                                                  download                                                   |
@@ -91,7 +91,7 @@ To validate the entire training loop (including [evaluation](./configs/evaluator
 ### Predict
 
 ```bash
-./predict.py +experiments=dd3d_kitti_dla34
+python3 predict.py +experiments=dd3d_kitti_dla34
 ```
 
 ### Evaluation
@@ -99,9 +99,9 @@ To validate the entire training loop (including [evaluation](./configs/evaluator
 One can run only evaluation using the pretrained models:
 
 ```bash
-./train.py +experiments=dd3d_kitti_dla34 EVAL_ONLY=True MODEL.CKPT=<path-to-pretrained-model>
+python3 train.py +experiments=dd3d_kitti_dla34 EVAL_ONLY=True MODEL.CKPT=<path-to-pretrained-model>
 # use smaller batch size for single-gpu
-./train.py +experiments=dd3d_kitti_dla34  EVAL_ONLY=True MODEL.CKPT=<path-to-pretrained-model> TEST.IMS_PER_BATCH=4
+python3 train.py +experiments=dd3d_kitti_dla34  EVAL_ONLY=True MODEL.CKPT=<path-to-pretrained-model> TEST.IMS_PER_BATCH=4
 ```
 
 ## Models

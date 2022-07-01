@@ -1,4 +1,5 @@
 # Copyright 2021 Toyota Research Institute.  All rights reserved.
+from turtle import back
 import torch
 from torch import nn
 
@@ -22,6 +23,7 @@ class DD3D(nn.Module):
         self.backbone = build_feature_extractor(cfg)
 
         backbone_output_shape = self.backbone.output_shape()
+        print("backbone_output_shape {}".format(backbone_output_shape))
         self.in_features = cfg.DD3D.IN_FEATURES or list(backbone_output_shape.keys())
         self.backbone_output_shape = [backbone_output_shape[f] for f in self.in_features]
 

@@ -55,10 +55,15 @@ def main(cfg):
     checkpoint_file = cfg.MODEL.CKPT
     print("WEITHG IS {}".format(checkpoint_file))
     if checkpoint_file:
-        checkpoint_file = '/home/phj/Data/dd3d-supplement/demo/model/model_final2.pth' 
-        print(checkpoint_file)
+        checkpoint_file = '/home/dw/Data/dd3d-supplement/demo/model/model_final2.pth' 
+        checkpoint_file = "/home/dw/Data/dd3d-supplement/model_final.pth"
+        print("checkpoint_file {}".format(checkpoint_file))
         Checkpointer(model).load(checkpoint_file)
         print("loaded the weighs")
+    else:
+        checkpoint_file = "/home/dw/Data/dd3d-supplement/model_final.pth"
+        print("checkpoint_file {}".format(checkpoint_file))
+        Checkpointer(model).load(checkpoint_file)
     if cfg.EVAL_ONLY:
         assert cfg.TEST.ENABLED, "'eval-only' mode is not compatible with 'cfg.TEST.ENABLED = False'."
         test_results = do_test(cfg, model, is_last=True)
@@ -237,7 +242,7 @@ def do_test(cfg, model, is_last=False, use_tta=False):
 
         per_dataset_results = inference_on_dataset(model, dataloader, evaluator)
 
-        nums_data = int(len(dataloader) / 10)
+        nums_data = int(len(dataloader))
 
         # if use_tta:
         #     per_dataset_results = OrderedDict({k + '-tta': v for k, v in per_dataset_results.items()})

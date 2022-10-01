@@ -1,11 +1,10 @@
 # Copyright 2021 Toyota Research Institute.  All rights reserved.
 import tridet.modeling.dd3d
 from tridet.modeling import feature_extractor
-from tridet.modeling.dd3d import DD3DWithTTA, NuscenesDD3DWithTTA
+from tridet.modeling.dd3d import DD3DWithTTA
 
 TTA_MODELS = {
     "DD3D": DD3DWithTTA,
-    "NuscenesDD3D": NuscenesDD3DWithTTA,
 }
 
 

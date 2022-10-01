@@ -85,7 +85,7 @@ def main(cfg):
     model = build_model(cfg)
  
 
-    checkpoint_file = '/home/phj/Data/dd3d-supplement/model_final0.pth' 
+    checkpoint_file = '/home/dw/Data/dd3d-supplement/model_final_0.pth' 
     LOG.info("model loading from {}" .format(checkpoint_file))
     Checkpointer(model).load(checkpoint_file)
    
@@ -100,8 +100,8 @@ def main(cfg):
             stack.enter_context(inference_context(model))
         stack.enter_context(torch.no_grad())        
 
-        file_name = "/home/phj/Data/dd3d-supplement/demo/images-self/6_1656394721628559000.bmp"
-        # file_name = "/home/phj/Data/dd3d-supplement/demo/images/000041.png"
+        file_name = "/home/dw/Data/dd3d-supplement/demo/images-self/6_1654579408545226000.bmp"
+        # file_name = "/home/dw/Data/dd3d-supplement/demo/images/000041.png"
 
         file_img = cv2.imread(file_name)   
         if(file_img is None):
@@ -149,7 +149,10 @@ def main(cfg):
         for idx, box in enumerate(boxes_2d):    
 
             dist_z = pred_3d[idx][6]
-            dist_z = "%.1f"%dist_z
+            w = pred_3d[idx][7]
+            l = pred_3d[idx][8]
+            h = pred_3d[idx][9]
+            dist_z = "%.1f_%.1f,%.1f,%.1f"%(dist_z,l,w,h)
                             
             score = boxes_2d_scores[idx]
             class_idx = boxes_2d_pred_classes[idx]

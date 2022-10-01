@@ -9,7 +9,6 @@ from detectron2.structures import Instances
 
 from tridet.modeling.dd3d.fcos2d import FCOS2DHead, FCOS2DInference, FCOS2DLoss
 from tridet.modeling.dd3d.fcos3d import FCOS3DHead, FCOS3DInference, FCOS3DLoss
-from tridet.modeling.dd3d.postprocessing import nuscenes_sample_aggregate
 from tridet.modeling.dd3d.prepare_targets import DD3DTargetPreparer
 from tridet.modeling.feature_extractor import build_feature_extractor
 from tridet.structures.image_list import ImageList
@@ -50,7 +49,6 @@ class DD3D(nn.Module):
         self.bev_nms_iou_thresh = cfg.DD3D.INFERENCE.BEV_NMS_IOU_THRESH
 
         # nuScenes inference aggregates detections over all 6 cameras.
-        self.nusc_sample_aggregate_in_inference = cfg.DD3D.INFERENCE.NUSC_SAMPLE_AGGREGATE
         self.num_classes = cfg.DD3D.NUM_CLASSES
 
         self.register_buffer("pixel_mean", torch.Tensor(cfg.MODEL.PIXEL_MEAN).view(-1, 1, 1))
@@ -130,27 +128,13 @@ class DD3D(nn.Module):
 
             # Transpose to "image-first", i.e. (B, L)
             pred_instances = list(zip(*pred_instances))
+            print("pred_instance: {}".format(pred_instances))
             pred_instances = [Instances.cat(instances) for instances in pred_instances]
 
             # 2D NMS and pick top-K.
             if self.do_nms:
                 pred_instances = self.fcos2d_inference.nms_and_top_k(pred_instances, score_key)
 
-            if not self.only_box2d and self.do_bev_nms:
-                # Bird-eye-view NMS.
-                dummy_group_idxs = {i: [i] for i, _ in enumerate(pred_instances)}
-                if 'pose' in batched_inputs[0]:
-                    poses = [x['pose'] for x in batched_inputs]
-                else:
-                    poses = [x['extrinsics'] for x in batched_inputs]
-                pred_instances = nuscenes_sample_aggregate(
-                    pred_instances,
-                    dummy_group_idxs,
-                    self.num_classes,
-                    poses,
-                    iou_threshold=self.bev_nms_iou_thresh,
-                    include_boxes3d_global=False
-                )
 
             if self.postprocess_in_inference:
                 processed_results = []

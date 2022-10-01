@@ -11,6 +11,7 @@ hostfiles/
 *.txt
 *.bmp
 *.pth
+*.zip
 
 # kitti 3d
 data/datasets/KITTI3D

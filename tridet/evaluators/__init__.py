@@ -5,14 +5,12 @@ import os
 
 from detectron2.evaluation import COCOEvaluator, SemSegEvaluator
 
-from tridet.data.datasets.nuscenes import NUSCENES_ROOT
 from tridet.evaluators.kitti_3d_evaluator import KITTI3DEvaluator
-from tridet.evaluators.nuscenes_evaluator import NuscenesEvaluator
 from tridet.utils.comm import is_distributed
 
 LOG = logging.getLogger('tridet')
 
-AVAILABLE_EVALUATORS = ["coco_evaluator", "kitti3d_evaluator", "nuscenes_evaluator"]
+AVAILABLE_EVALUATORS = ["coco_evaluator", "kitti3d_evaluator"]
 
 
 def get_evaluator(cfg, dataset_name, evaluator_name, output_dir):
@@ -33,6 +31,3 @@ def get_evaluator(cfg, dataset_name, evaluator_name, output_dir):
             distributed=distributed,
             output_dir=output_dir,
         )
-    elif evaluator_name == "nuscenes_evaluator":
-        nusc_root = os.path.join(cfg.DATASET_ROOT, NUSCENES_ROOT)
-        return NuscenesEvaluator(nusc_root=nusc_root, dataset_name=dataset_name, output_dir=output_dir)

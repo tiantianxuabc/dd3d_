@@ -14,7 +14,6 @@ INFERENCE:
   DO_POSTPROCESS: True # Resize instances according to the original image size.
   DO_BEV_NMS: False # NMS in BEV space.
   BEV_NMS_IOU_THRESH: 0.3
-  NUSC_SAMPLE_AGGREGATE: False
 
 FCOS2D:
   _VERSION: v2
@@ -32,7 +31,7 @@ FCOS2D:
 
   INFERENCE:
     THRESH_WITH_CTR: True
-    PRE_NMS_THRESH: 0.13
+    PRE_NMS_THRESH: 0.15
     PRE_NMS_TOPK: 1000
     POST_NMS_TOPK: 100
     NMS_THRESH: 0.4

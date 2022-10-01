@@ -106,8 +106,6 @@ python3 train.py +experiments=dd3d_kitti_dla34  EVAL_ONLY=True MODEL.CKPT=<path-
 
 ## Models
 
-All experiments here use 8 A100 40G GPUs, and use gradient accumulation when more GPU memory is needed. We subsample nuScenes validation set by a factor of 8 (2Hz ⟶ 0.25Hz) to save training time.
-
 ### KITTI
 
 |                     experiment                      | backbone | train mem. (GB) | train time (hr) |                                                  train log                                                  | Box AP (%) | BEV AP (%) |                                                     download                                                     |

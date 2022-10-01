@@ -55,59 +55,6 @@ def sample_bev_nms(instances, poses, category_key='pred_classes', iou_threshold=
     return keep, boxes3d_global
 
 
-def nuscenes_sample_aggregate(
-    instances,
-    group_idxs,
-    num_classes,
-    global_poses,
-    iou_threshold,
-    include_boxes3d_global=True,
-    max_num_dets_per_sample=None
-):
-    """
-    Parameters
-    ----------
-    instances: List[Instances]
-        Predicted instances.
-
-    group_idxs: dict
-        Mapping from nuScene's `sample_token` to a list of indices of `instances.`
-
-    num_classes: int
-        Number of classes.
-
-    pose_global: List[Pose]
-        List of global poses for each image (or Instances)
-    """
-    num_images = len(instances)
-    for group_idx, (_, idxs) in enumerate(group_idxs.items()):
-        group_id = group_idx * num_classes
-        for idx in idxs:
-            instances[idx].image_id = torch.ones_like(instances[idx].pred_classes) * idx
-            instances[idx].sample_category_id = instances[idx].pred_classes + group_id
-    keep, boxes3d_global = sample_bev_nms(
-        instances, global_poses, category_key='sample_category_id', iou_threshold=iou_threshold
-    )
-
-    # NOTE: NuScenes allow max. 500 detections per sample
-    if max_num_dets_per_sample:
-        keep = keep[:max_num_dets_per_sample]
-
-    instances = Instances.cat(instances)
-    if include_boxes3d_global:
-        instances.pred_boxes3d_global = boxes3d_global
-    instances.remove('sample_category_id')
-
-    mask = _indices_to_mask(keep, len(instances))
-    _filtered_instances = instances[mask]
-    filtered_instances = []
-    for image_id in range(num_images):
-        _instances = _filtered_instances[_filtered_instances.image_id == image_id]
-        _instances.remove('image_id')
-        filtered_instances.append(_instances)
-    return filtered_instances
-
-
 def get_group_idxs(sample_tokens, num_images_per_sample, inverse=False):
     grouped_idxs = defaultdict(list)
     for idx, token in enumerate(sample_tokens):

@@ -41,7 +41,6 @@ def predictions_to_boxes3d(
         depth = depth / unproject_points2d(locations, inv_intrinsics).norm(dim=1).clamp(min=EPS)
 
     depth = depth.reshape(-1, 1).clamp(min_depth, max_depth)
-
     proj_ctr = proj_ctr + locations
 
     if quat_is_allocentric:
@@ -352,6 +351,7 @@ class FCOS3DInference():
             box3d_size_per_im = box3d_size[i][fg_inds_per_im]
             box3d_conf_per_im = box3d_conf[i][fg_inds_per_im]
 
+
             if self.class_agnostic:
                 box3d_quat_per_im = box3d_quat_per_im.squeeze(-1)
                 box3d_ctr_per_im = box3d_ctr_per_im.squeeze(-1)
@@ -365,7 +365,6 @@ class FCOS3DInference():
                 box3d_depth_per_im = torch.gather(box3d_depth_per_im, dim=1, index=I.squeeze(-1)).squeeze(-1)
                 box3d_size_per_im = torch.gather(box3d_size_per_im, dim=2, index=I.repeat(1, 3, 1)).squeeze(-1)
                 box3d_conf_per_im = torch.gather(box3d_conf_per_im, dim=1, index=I.squeeze(-1)).squeeze(-1)
-            # print("box3d_quat_per_im shape {}".format(box3d_quat_per_im.shape))
             if topk_indices is not None:
                 box3d_quat_per_im = box3d_quat_per_im[topk_indices]
                 box3d_ctr_per_im = box3d_ctr_per_im[topk_indices]

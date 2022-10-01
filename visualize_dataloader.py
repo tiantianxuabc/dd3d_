@@ -40,7 +40,9 @@ def main(cfg):
     for batch_idx, batch in tqdm(enumerate(dataloader)):
         viz_images = defaultdict(dict)
         LOG.info("Press any key to continue, press 'q' to quit.")
+        print(visualizer_names)
         for viz_name in visualizer_names:
+            print(viz_name)
             viz = get_dataloader_visualizer(cfg, viz_name, cfg.DATASETS.TRAIN.NAME)
             for idx, x in enumerate(batch):
                 viz_images[idx].update(viz.visualize(x))

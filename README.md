@@ -82,9 +82,6 @@ To validate the entire training loop (including [evaluation](./configs/evaluator
 python3 train.py +experiments=dd3d_kitti_dla34
 ```
 
-|                         experiment                          | backbone | train mem. (GB) | traiqn time (hr) |                                               train log                                                | Box AP (%) | BEV AP (%) |                                                  download                                                   |
-| :---------------------------------------------------------: | :------: | :-------------: | :--------------: | :----------------------------------------------------------------------------------------------------: | :--------: | :--------: | :---------------------------------------------------------------------------------------------------------: |
-| [config](configs/experiments/dd3d_kitti_dla34_overfit.yaml) |  DLA-34  |        6        |       0.25       | [log](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/logs/log.txt) |   84.54    |   88.83    | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/model_final.pth) |
 
 ### Predict
 
@@ -101,14 +98,6 @@ python3 train.py +experiments=dd3d_kitti_dla34 EVAL_ONLY=True MODEL.CKPT=<path-t
 # use smaller batch size for single-gpu
 python3 train.py +experiments=dd3d_kitti_dla34  EVAL_ONLY=True MODEL.CKPT=<path-to-pretrained-model> TEST.IMS_PER_BATCH=4
 ```
-
-## Models
-
-### KITTI
-
-|                     experiment                      | backbone | train mem. (GB) | train time (hr) |                                                  train log                                                  | Box AP (%) | BEV AP (%) |                                                     download                                                     |
-| :-------------------------------------------------: | :------: | :-------------: | :-------------: | :---------------------------------------------------------------------------------------------------------: | :--------: | :--------: | :--------------------------------------------------------------------------------------------------------------: |
-| [config](configs/experiments/dd3d_kitti_dla34.yaml) |  DLA-34  |       256       |       4.5       | [log](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/26675chm-20210826_083148/logs/log.txt) |   16.92    |   24.77    | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/26675chm-20210826_083148/model_final.pth) |
 
 ## License
 

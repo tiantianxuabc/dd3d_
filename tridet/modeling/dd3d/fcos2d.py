@@ -267,12 +267,13 @@ class FCOS2DInference():
 
         return pred_instances, extra_info
 
+    
     def forward_for_single_feature_map(self, logits, box2d_reg, centerness, locations, image_sizes):
         N, C, _, __ = logits.shape
 
         # put in the same format as locations
         scores = logits.permute(0, 2, 3, 1).reshape(N, -1, C).sigmoid()
-      
+        # print("scores(logits.sigmoid()) {}".format(scores.shape))
       
         box2d_reg = box2d_reg.permute(0, 2, 3, 1).reshape(N, -1, 4)
         centerness = centerness.permute(0, 2, 3, 1).reshape(N, -1).sigmoid()
@@ -280,6 +281,7 @@ class FCOS2DInference():
         # if self.thresh_with_ctr is True, we multiply the classification
         # scores with centerness scores before applying the threshold.
         if self.thresh_with_ctr:
+            # print("centerness  {} {}".format(centerness.shape,centerness[:, :, None].shape))
             scores = scores * centerness[:, :, None]
 
         
@@ -289,8 +291,10 @@ class FCOS2DInference():
 
         candidate_mask_max = max_scores_value > self.pre_nms_thresh
         candidate_mask = scores > self.pre_nms_thresh
+        # print("candidata_mask {} \nshape {}".format(candidate_mask, candidate_mask.shape))
 
         pre_nms_topk = candidate_mask.reshape(N, -1).sum(1)
+        # print("pre_nms_topk {}".format(pre_nms_topk))
         pre_nms_topk = pre_nms_topk.clamp(max=self.pre_nms_topk)
 
         if not self.thresh_with_ctr:
@@ -304,19 +308,16 @@ class FCOS2DInference():
              
             candidate_mask_per_im = candidate_mask[i]
             scores_per_im = scores_per_im[candidate_mask_per_im]
+            # print("scores_per_im {} scores_per_im shape {}".format(scores_per_im, scores_per_im.shape))
 
                 
 
             candidate_inds_per_im = candidate_mask_per_im.nonzero(as_tuple=False)
+            # print("candidate_indx_per_im {}".format(candidate_inds_per_im))
+            # the index of  candidate  object in location
             fg_inds_per_im = candidate_inds_per_im[:, 0]
+            # the class index of candidate object
             class_inds_per_im = candidate_inds_per_im[:, 1]
-            # print("fg_inds_per_im.shape {} , class_inds_per_im.shape {}".format(fg_inds_per_im.shape, class_inds_per_im.shape))
-            
-            # max_scores_value = max_scores_value[candidate_mask_max]
-            
-            # fg_inds_per_im = candidate_mask_max.nonzero(as_tuple=False)[:,1]
-            # class_inds_per_im = max_scores_index[candidate_mask_max]
-            # print("fg_inds_per_im.shape {} , class_inds_per_im.shape {}".format(fg_inds_per_im.shape, class_inds_per_im.shape))
 
             # Cache info here.
             all_fg_inds_per_im.append(fg_inds_per_im)
@@ -335,9 +336,11 @@ class FCOS2DInference():
                 box2d_reg_per_im = box2d_reg_per_im[topk_indices]
                 locations_per_im = locations_per_im[topk_indices]
             else:
+                print("topk_indices is None")
                 topk_indices = None
 
             all_topk_indices.append(topk_indices)
+            # print("location_per_in {} \nboxed_reg_per_im {}".format(locations_per_im, box2d_reg_per_im))
 
             detections = torch.stack([
                 locations_per_im[:, 0] - box2d_reg_per_im[:, 0],

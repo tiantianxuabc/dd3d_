@@ -22,10 +22,9 @@ class DD3D(nn.Module):
         self.backbone = build_feature_extractor(cfg)
 
         backbone_output_shape = self.backbone.output_shape()
-        print("backbone_output_shape {}".format(backbone_output_shape))
+        # print("backbone_output_shape {}".format(backbone_output_shape))
         self.in_features = cfg.DD3D.IN_FEATURES or list(backbone_output_shape.keys())
         self.backbone_output_shape = [backbone_output_shape[f] for f in self.in_features]
-
         self.feature_locations_offset = cfg.DD3D.FEATURE_LOCATIONS_OFFSET
 
         self.fcos2d_head = FCOS2DHead(cfg, self.backbone_output_shape)
@@ -101,6 +100,7 @@ class DD3D(nn.Module):
 
             losses = {}
             fcos2d_loss, fcos2d_info = self.fcos2d_loss(logits, box2d_reg, centerness, training_targets)
+            
             losses.update(fcos2d_loss)
 
             if not self.only_box2d:
@@ -111,16 +111,13 @@ class DD3D(nn.Module):
                 losses.update(fcos3d_loss)
             return losses
         else:
-            pred_instances, fcos2d_info = self.fcos2d_inference(
-                logits, box2d_reg, centerness, locations, images.image_sizes
-            )
+            pred_instances, fcos2d_info = self.fcos2d_inference( logits, box2d_reg, centerness, locations, images.image_sizes )
             if not self.only_box2d:
                 # This adds 'pred_boxes3d' and 'scores_3d' to Instances in 'pred_instances' in place.
                 self.fcos3d_inference(
                     box3d_quat, box3d_ctr, box3d_depth, box3d_size, box3d_conf, inv_intrinsics, pred_instances,
                     fcos2d_info
                 )
-
                 # 3D score == 2D score x confidence.
                 score_key = "scores_3d"
             else:
@@ -128,7 +125,6 @@ class DD3D(nn.Module):
 
             # Transpose to "image-first", i.e. (B, L)
             pred_instances = list(zip(*pred_instances))
-            print("pred_instance: {}".format(pred_instances))
             pred_instances = [Instances.cat(instances) for instances in pred_instances]
 
             # 2D NMS and pick top-K.
@@ -158,4 +154,5 @@ class DD3D(nn.Module):
                 h, w, in_strides[level], feature.dtype, feature.device, offset=self.feature_locations_offset
             )
             locations.append(locations_per_level)
+            # print(level, locations_per_level )
         return locations

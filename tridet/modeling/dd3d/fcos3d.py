@@ -317,7 +317,7 @@ class FCOS3DInference():
         # pred_instances: # List[List[Instances]], shape = (L, B)
         for lvl, (box3d_quat_lvl, box3d_ctr_lvl, box3d_depth_lvl, box3d_size_lvl, box3d_conf_lvl) in \
             enumerate(zip(box3d_quat, box3d_ctr, box3d_depth, box3d_size, box3d_conf)):
-
+            # print("3d_inference lvl {}".format(lvl))
             # In-place modification: update per-level pred_instances.
             self.forward_for_single_feature_map(
                 box3d_quat_lvl, box3d_ctr_lvl, box3d_depth_lvl, box3d_size_lvl, box3d_conf_lvl, inv_intrinsics,
@@ -329,7 +329,7 @@ class FCOS3DInference():
     ):
         N = box3d_quat.shape[0]
         
-
+        # print("box3d_quart shape {}".format(N))
         num_classes = self.num_classes if not self.class_agnostic else 1
 
         box3d_quat = box3d_quat.permute(0, 2, 3, 1).reshape(N, -1, 4, num_classes)
@@ -350,6 +350,8 @@ class FCOS3DInference():
             box3d_depth_per_im = box3d_depth[i][fg_inds_per_im]
             box3d_size_per_im = box3d_size[i][fg_inds_per_im]
             box3d_conf_per_im = box3d_conf[i][fg_inds_per_im]
+            # print("boxed_quqt_per_im {}".format(box3d_quat_per_im))
+            # print("shape {}".format(box3d_quat_per_im.shape))
 
 
             if self.class_agnostic:
@@ -360,7 +362,9 @@ class FCOS3DInference():
                 box3d_conf_per_im = box3d_conf_per_im.squeeze(-1)
             else:
                 I = class_inds_per_im[..., None, None]
+                # print("I {}".format(I))
                 box3d_quat_per_im = torch.gather(box3d_quat_per_im, dim=2, index=I.repeat(1, 4, 1)).squeeze(-1)
+                # print("after boxed_quqt_per_im {}".format(box3d_quat_per_im))
                 box3d_ctr_per_im = torch.gather(box3d_ctr_per_im, dim=2, index=I.repeat(1, 2, 1)).squeeze(-1)
                 box3d_depth_per_im = torch.gather(box3d_depth_per_im, dim=1, index=I.squeeze(-1)).squeeze(-1)
                 box3d_size_per_im = torch.gather(box3d_size_per_im, dim=2, index=I.repeat(1, 3, 1)).squeeze(-1)

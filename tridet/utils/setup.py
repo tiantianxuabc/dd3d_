@@ -74,8 +74,8 @@ def setup(cfg):
     seed = get_random_seed()
     seed_all_rng(seed)
 
-    LOG.info("Working Directory: {}".format(os.getcwd()))
-    LOG.info("Full config:\n{}".format(json.dumps(OmegaConf.to_container(cfg, resolve=True), indent=2)))
+    # LOG.info("Working Directory: {}".format(os.getcwd()))
+    # LOG.info("Full config:\n{}".format(json.dumps(OmegaConf.to_container(cfg, resolve=True), indent=2)))
 
     # Set up EventStorage
     storage = WandbEventStorage()

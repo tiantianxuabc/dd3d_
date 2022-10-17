@@ -11,7 +11,7 @@ def compute_features_locations(h, w, stride, dtype=torch.float32, device='cpu', 
     """
     shifts_x = torch.arange(0, w * stride, step=stride, dtype=dtype, device=device)
     shifts_y = torch.arange(0, h * stride, step=stride, dtype=dtype, device=device)
-    shift_y, shift_x = torch.meshgrid(shifts_y, shifts_x)
+    shift_y, shift_x = torch.meshgrid(shifts_y, shifts_x, indexing='ij')
     shift_x = shift_x.reshape(-1)
     shift_y = shift_y.reshape(-1)
     # (dennis.park)

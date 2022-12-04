@@ -79,7 +79,6 @@ def inference_context(model):
 
 @hydra.main(config_path="./configs/", config_name="defaults")
 def main(cfg):
-    print(cfg)
     setup(cfg)
     dataset_names = register_datasets(cfg)
     LOG.info("buld the model ...")
@@ -191,7 +190,7 @@ def main(cfg):
             image_width=img_copy.shape[1],
             metadata=None,
             color=(0, 0, 255))
-        viz_image = cv2.rotate(viz_image, cv2.cv2.ROTATE_90_COUNTERCLOCKWISE)
+        viz_image = cv2.rotate(viz_image, cv2.ROTATE_90_COUNTERCLOCKWISE)
         # Crop the BEV image to show only frustum.
         viz_image = bev_frustum_crop(viz_image)
         cv2.imshow("image_object_bev", viz_image)

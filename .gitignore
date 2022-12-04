@@ -18,6 +18,11 @@ data/datasets/KITTI3D
 demo/inputs-self/
 demo/model/
 
+pytorch3d
+pytorch3d/*
+detectron2
+detectron2/*
+
 # compilation and distribution
 __pycache__
 _ext

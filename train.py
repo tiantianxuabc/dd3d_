@@ -55,13 +55,13 @@ def main(cfg):
     checkpoint_file = cfg.MODEL.CKPT
     print("WEITHG IS {}".format(checkpoint_file))
     if checkpoint_file:
-        checkpoint_file = '/home/dw/Data/dd3d-supplement/demo/model/model_final2.pth' 
-        checkpoint_file = "/home/dw/Data/dd3d-supplement/model_final.pth"
+        checkpoint_file = '/home/myneml/Data/dd3d-supplement/demo/model/model_final2.pth' 
+        checkpoint_file = "/home/myneml/Data/dd3d-supplement/model_final.pth"
         print("checkpoint_file {}".format(checkpoint_file))
         Checkpointer(model).load(checkpoint_file)
         print("loaded the weighs")
     else:
-        checkpoint_file = "/home/dw/Data/dd3d-supplement/model_final.pth"
+        checkpoint_file = "/home/myneml/Data/dd3d-supplement/model_final.pth"
         print("checkpoint_file {}".format(checkpoint_file))
         Checkpointer(model).load(checkpoint_file)
     if cfg.EVAL_ONLY:

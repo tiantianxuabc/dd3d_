@@ -79,13 +79,14 @@ def inference_context(model):
 
 @hydra.main(config_path="./configs/", config_name="defaults")
 def main(cfg):
+    print(cfg)
     setup(cfg)
     dataset_names = register_datasets(cfg)
     LOG.info("buld the model ...")
     model = build_model(cfg)
  
 
-    checkpoint_file = '/home/dw/Data/dd3d-supplement/model_final_0.pth' 
+    checkpoint_file = '/home/myneml/Data/dd3d-supplement/model_final_0.pth' 
     LOG.info("model loading from {}" .format(checkpoint_file))
     Checkpointer(model).load(checkpoint_file)
    
@@ -100,8 +101,8 @@ def main(cfg):
             stack.enter_context(inference_context(model))
         stack.enter_context(torch.no_grad())        
 
-        file_name = "/home/dw/Data/dd3d-supplement/demo/images-self/6_1654579408545226000.bmp"
-        # file_name = "/home/dw/Data/dd3d-supplement/demo/images/000041.png"
+        file_name = "/home/myneml/Data/dd3d-supplement/images-self/6_1654579408545226000.bmp"
+        # file_name = "/home/myneml/Data/dd3d-supplement/demo/images/000041.png"
 
         file_img = cv2.imread(file_name)   
         if(file_img is None):

@@ -52,6 +52,8 @@ The dataset must be organized as follows:
 ## Install
 
 ```bash
+sudo apt install tk-dev
+sudo apt install python3-tk
 
 pip install -r requirements.txt
 

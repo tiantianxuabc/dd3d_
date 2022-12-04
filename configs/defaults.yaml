@@ -32,7 +32,7 @@ SYNC_OUTPUT_DIR_S3:
   # How frequently (in training steps) to sync the working directory.
   PERIOD: 1000
 
-DATASET_ROOT: /home/dw/Data/dd3d-supplement/data/datasets/
+DATASET_ROOT: /home/myneml/Data/dd3d-supplement/data/datasets/
 TMP_DIR: /tmp/
 
 hydra:
